@@ -27,7 +27,7 @@ function parseTag(content:string) {
     return properties;
 }
 
-function parseTags(content:string) {
+function parseScene(content:string) {
     let tagContent = content.matchAll(tag);
     const tags = [];
     Array.from(tagContent).forEach(match => {
@@ -66,10 +66,4 @@ function parseTags(content:string) {
     return sceneTree;
 }
 
-let content = readFileSync("ignore/index.jsv", "utf-8");
-console.time("parse")
-let scene = parseTags(content)
-console.timeEnd("parse")
-console.log(scene);
-
-export {}
+export { parseScene }

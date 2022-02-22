@@ -5,6 +5,9 @@ interface Tag {
     [property:string]: string | number | boolean
 }
 
+const inlineValues = {
+    goto: "scene"
+}
 
 interface TagTypes extends Record<string, Tag> {
     scene: {
@@ -21,6 +24,10 @@ interface TagTypes extends Record<string, Tag> {
     if: {
         condition:string, 
     }, 
+    goto: {
+        scene: string, 
+        label: string
+    }
 }
 
 export type { TagTypes, FocusMode }

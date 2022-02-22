@@ -16,7 +16,7 @@ interface CharacterSpeech {
     lines: string[]
 }
 
-type SceneProp =  Tag<"scene"> | Tag<"play"> | Tag<"play"> | CharacterSpeech;
+type SceneProp = Tag<"goto"> | Tag<"scene"> | Tag<"play"> | Tag<"play"> | CharacterSpeech;
 type SceneTree = SceneProp[];
 
 export type { SceneProp, SceneTree, TagName }

@@ -1,8 +1,8 @@
 import { readFileSync } from "fs"
+import type { SceneTree } from "./types";
 
 const tag = /---?([\w\W]*?)---?/g
 const inlineTag = /(\w+):([\w\W]+)/g
-const expandedTag = /(\w+)(\w+:\w+)+/g
 
 function parseTag(content:string) {
     let properties: Record<string, string | boolean> = { type: "tag" };
@@ -27,7 +27,8 @@ function parseTag(content:string) {
     return properties;
 }
 
-function parseScene(content:string) {
+function parseScene(scenePath:string): SceneTree {
+    let content = readFileSync(scenePath, "utf-8");
     let tagContent = content.matchAll(tag);
     const tags = [];
     Array.from(tagContent).forEach(match => {
@@ -41,7 +42,7 @@ function parseScene(content:string) {
     // Now that all tags are extracted, create dialog sequence
     let lines = content.split('\n').map(line => line.trim()).filter(line => line != '');
     let sceneTree = [];
-    lines.forEach((line, index) => {
+    lines.forEach((line, _) => {
         let tagMatch = Array.from(line.matchAll(/__tag(\d)__/g))
         if (tagMatch?.[0])
             return sceneTree.push(tags[tagMatch[0][1]]);

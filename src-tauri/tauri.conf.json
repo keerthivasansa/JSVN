@@ -50,11 +50,44 @@
       "active": false
     },
     "allowlist": {
-      "all": true
+      "dialog": {
+        "save": true, 
+        "open": true
+      },
+      "shell": {
+        "scope": [ 
+            {
+            "name": "code",
+            "cmd": "code",
+            "args": ["--version"]
+          }, {
+            "name": "time", 
+            "cmd": "echo", 
+            "args": ["hello"]
+          }
+        ], 
+        "execute": true
+      },
+      "fs": {
+        "scope": [
+          "$DOCUMENT\\JSVN\\**",
+          "$DOCUMENT\\JSVN\\**\\*"
+        ],
+        "createDir": true,
+        "writeFile": true, 
+        "readDir": true
+      }, 
+      "window": {
+        "setTitle": true, 
+        "close": true
+      }, 
+      "path": {
+        "all": true
+      }   
     },
     "windows": [
       {
-        "title": "Tauri App",
+        "title": "JSVN",
         "width": 800,
         "height": 600,
         "resizable": true,

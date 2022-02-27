@@ -18,10 +18,3 @@
     }
 
 </script>
-
-<svelte:head>
-    <title>{scene.name}</title>
-</svelte:head>
-
-<main>
-</main>

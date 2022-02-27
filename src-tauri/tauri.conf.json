@@ -70,6 +70,8 @@
       },
       "fs": {
         "scope": [
+          "$DOCUMENT\\*",
+          "$DOCUMENT\\JSVN\\",
           "$DOCUMENT\\JSVN\\**",
           "$DOCUMENT\\JSVN\\**\\*"
         ],

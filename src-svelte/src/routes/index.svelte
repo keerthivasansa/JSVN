@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { documentDir, join } from '@tauri-apps/api/path';
-	import { listen } from '@tauri-apps/api/event';
 	import { createDir, Dir, writeFile, readDir } from '@tauri-apps/api/fs';
 	import { appWindow } from '@tauri-apps/api/window';
 	import { onMount } from 'svelte';
@@ -12,30 +11,25 @@
 	let projectName: string;
 	$: validProject = projectName && !projects.includes(projectName);
 
-	listen('tauri://file-drop', (event) => {
-		console.log(event.payload);
-		let files = event.payload as string[];
-		let file = files[0];
-		if (!file.endsWith('.jsv')) alert('The file is not a JSV project file');
-	});
-
 	function exitApplication() {
 		appWindow.close();
 	}
 
 	async function newProjectDialog() {
+		console.log("awpeofakwe")
 		// const DOCUMENT_DIR = await documentDir();
 		try {
 			let docs = await readDir('JSVN', {
 				dir: Dir.Document,
 				recursive: true
 			});
+			console.log({ docs });
 			projects = docs.map((file) => file.name);
 			showNewProject = true;
             console.log(projects);
 		} catch (err) {
+			
 			if ((err as string).includes('os error 3')) {
-				// Folder doesn't exist
 				createDir('JSVN', {
 					dir: Dir.Document,
 					recursive: true
@@ -46,13 +40,20 @@
 	}
 
 	async function createProject() {
-		let projectPath = await join(PROJECT_DIR, projectName);
-        console.log({ projectPath })
-		await createDir(projectPath);
-		await writeFile({
-			path: await join(projectPath, 'start.jsv'),
-			contents: DEFAULT_SCENE
+		let relativeProjectPath = await join("JSVN", projectName);
+        console.log({ relativeProjectPath })
+		await createDir(relativeProjectPath, {
+			dir: Dir.Document, 
+			recursive: true
 		});
+		console.log("Created directory: " + relativeProjectPath);
+		await writeFile({
+			path: await join(relativeProjectPath, "start.jsv"),
+			contents: DEFAULT_SCENE
+		}, {
+			dir: Dir.Document
+		});
+		console.log("Created default scene");
         showNewProject = false;
 	}
 

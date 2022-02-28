@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { documentDir, join } from '@tauri-apps/api/path';
-	import { createDir, Dir, writeFile, readDir, copyFile } from '@tauri-apps/api/fs';
+	import { createDir, Dir, writeFile, readDir } from '@tauri-apps/api/fs';
 	import { appWindow } from '@tauri-apps/api/window';
 	import { onMount } from 'svelte';
 	import { DEFAULT_SCENE } from '$lib/default';

@@ -5,12 +5,6 @@
 <script lang="ts">
     import { BaseDirectory, readTextFile } from "@tauri-apps/api/fs"
 
-    let counter = 0;
-    
-    interface TitleScreen {
-        disabledOptions
-    }
-
     let options = {
         display:false, 
         selected: "General"    
@@ -38,9 +32,6 @@
                 options.display = true
                 break
         }
-    }
-    function hello() {
-        counter += 1;
     }
 
     load();

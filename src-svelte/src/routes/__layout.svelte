@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import '../app.css';
 
-	window.var = (name) => localStorage.getItem("name")
+	window.var = (name: string) => localStorage.getItem(name)
 </script>
 
 <slot />

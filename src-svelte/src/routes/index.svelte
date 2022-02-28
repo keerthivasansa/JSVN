@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dirname, documentDir, join } from '@tauri-apps/api/path';
+	import { documentDir, join } from '@tauri-apps/api/path';
 	import { createDir, Dir, writeFile, readDir, copyFile } from '@tauri-apps/api/fs';
 	import { appWindow } from '@tauri-apps/api/window';
 	import { onMount } from 'svelte';
@@ -18,8 +18,6 @@
 	}
 
 	async function newProjectDialog() {
-		console.log('awpeofakwe');
-		// const DOCUMENT_DIR = await documentDir();
 		try {
 			let docs = await readDir('JSVN', {
 				dir: Dir.Document,
@@ -80,7 +78,7 @@
 </script>
 
 <Modal bind:show={showNewProject}>
-	<form class="flex gap-5 flex-col p-5">
+	<form slot="modal-inner" class="flex gap-5 flex-col p-5">
 		<h1>Create New Project</h1>
 		<div>
 			<span>{PROJECT_DIR}</span>
@@ -98,8 +96,8 @@
 			/>
 		</div>
 	</form>
-	<div class="flex flex-row">
-		<button on:click={(_) => (showNewProject = false)} style="width:50%"> Cancel </button>
+	<div slot="buttons" class="flex flex-row">
+		<button class="bg-red-900 rounded-bl-lg text-white" on:click={(_) => (showNewProject = false)} style="width:50%"> Cancel </button>
 		<button
 			style="width:50%"
 			on:click={createProject}
@@ -111,11 +109,13 @@
 </Modal>
 
 <Modal bind:show={showOpenProject}>
-	<h1 class="text-center">Projects</h1>
-	<div class="flex flex-row gap-4">
-		{#each projects as project}
-			<span class="px-2 py-4 border-2 border-black rounded-lg">{project}</span>
-		{/each}
+	<div slot="modal-inner">
+		<h1 style="margin-bottom: 1.5rem;" class="text-center">Projects</h1>
+		<div class="flex flex-row row-wrap gap-4">
+			{#each projects as project}
+				<span style="min-width: 3rem;" class="px-2 py-4 border-2 border-black rounded-lg">{project}</span>
+			{/each}
+		</div>
 	</div>
 </Modal>
 

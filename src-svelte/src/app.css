@@ -6,3 +6,7 @@
 h1 {
     @apply text-2xl font-bold
 }
+
+.fira-code {
+    font-family: 'Fira Code';
+}

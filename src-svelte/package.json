@@ -1,8 +1,9 @@
 {
-	"name": "src",
+	"name": "jsvn-svelte",
 	"version": "0.0.1",
+	"private": true,
 	"scripts": {
-		"dev": "svelte-kit dev",
+		"dev": "svelte-kit dev --host",
 		"build": "svelte-kit build",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",

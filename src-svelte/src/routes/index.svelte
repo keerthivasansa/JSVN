@@ -97,11 +97,17 @@
 		</div>
 	</form>
 	<div slot="buttons" class="flex flex-row">
-		<button class="bg-red-900 rounded-bl-lg text-white" on:click={(_) => (showNewProject = false)} style="width:50%"> Cancel </button>
+		<button
+			class="bg-red-900 rounded-bl-lg text-white"
+			on:click={(_) => (showNewProject = false)}
+			style="width:50%"
+		>
+			Cancel
+		</button>
 		<button
 			style="width:50%"
 			on:click={createProject}
-			class="{validProject ? 'bg-black' : 'bg-gray-500'} text-white rounded-br-lg"
+			class="{validProject ? 'bg-blue-800' : 'bg-gray-500'} text-white rounded-br-lg"
 		>
 			Create
 		</button>
@@ -113,42 +119,54 @@
 		<h1 style="margin-bottom: 1.5rem;" class="text-center">Projects</h1>
 		<div class="flex flex-row row-wrap gap-4">
 			{#each projects as project}
-				<span style="min-width: 3rem;" class="px-2 py-4 border-2 border-black rounded-lg">{project}</span>
+				<span style="min-width: 3rem;" class="px-2 py-4 border-2 border-black rounded-lg"
+					>{project}</span
+				>
 			{/each}
 		</div>
 	</div>
 </Modal>
 
-
-<main class="p-5">
-	<h1 class="text-2xl w-full text-center">JSVN</h1>
-	<div class="flex flex-row flex-wrap gap-4">
-		<span
-			on:click={newProjectDialog}
-			class="cursor-pointer p-5 border-gray-700 flex flex-col items-center rounded-lg border-2"
-		>
-			<img alt="" src="/New.svg" width="5vw" />
-			<span>New</span>
-		</span>
-		<span
-			on:click={openProjectDialog}
-			class="cursor-pointer p-5 border-gray-700 flex flex-col items-center rounded-lg border-2"
-		>
-			<img alt="" src="/Open.svg" width="5vw" />
-			<span>Open</span>
-		</span>
-		<span
-			on:click={exitApplication}
-			class="cursor-pointer p-5 border-gray-700 flex flex-col items-center rounded-lg border-2"
-		>
-			<img alt="" src="/Exit.svg" width="5vw" />
-			<span>Exit</span>
-		</span>
-	</div>
-</main>
+<div style="background-image: url('/visual-novel-desk-bg.jpg'); background-size: cover;">
+	<main class="p-5 text-white bg-black bg-opacity-50" style="width: 100vw; height: 100vh;">
+		<h1 class="text-6xl my-6 fira-code w-full text-center">JSVN</h1>
+		<div class="mx-5">
+			<div class="flex flex-row flex-wrap gap-10 my-16">
+				<span on:click={newProjectDialog} class="nav-span">
+					<img alt="" src="/New.svg" width="5vw" />
+					<span>New</span>
+				</span>
+				<span on:click={openProjectDialog} class="nav-span">
+					<img alt="" src="/Open.svg" width="5vw" />
+					<span>Open</span>
+				</span>
+				<span on:click={exitApplication} class="nav-span">
+					<img alt="" src="/Exit.svg" width="5vw" />
+					<span>Exit</span>
+				</span>
+			</div>
+			<h3 class="font-semibold text-4xl my-10 block">Recents</h3>
+			<div class="bg-white px-5 py-3 w-max font-semibold text-black rounded-md">
+				<h5 class="text-xl">The Legends of Chrona</h5>
+				<p class="font-normal my-4">Some description</p>
+				<button class="pjt-btn">Open from Start</button>
+				<button class="pjt-btn">Open Scenes</button>
+				<button class="pjt-btn">Play</button>
+			</div>
+		</div>
+	</main>
+</div>
 
 <style type="text/postcss">
+	.nav-span {
+		@apply cursor-pointer px-8 py-4 text-black font-semibold bg-white flex flex-col items-center rounded-md;
+	}
+
 	button {
 		@apply py-2 px-3;
+	}
+
+	.pjt-btn {
+		@apply bg-blue-700 text-white rounded-md text-sm mx-1;
 	}
 </style>

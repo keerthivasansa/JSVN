@@ -3,5 +3,5 @@
 misc.js
 .DS_Store
 .vscode
-public
 ignore/
+src-svelte/

@@ -1,11 +1,11 @@
-import { readFileSync } from "fs"
+import { Dir, readTextFile } from "@tauri-apps/api/fs";
 import type { SceneTree } from "./types";
 
 const tag = /---?([\w\W]*?)---?/g
-const inlineTag = /(\w+):([\w\W]+)/g
+const inlineTag = /(\w+):([\w\W]+):?([\w\W]+)?/g
 
 function parseTag(content:string) {
-    let properties: Record<string, string | boolean> = { type: "tag" };
+    let properties: Record<string, string | boolean | string[]> = { type: "tag" };
     if (content.includes('\n')) {
         let lines = content.split('\n').map(line => line.trim()).filter(line => line != '');
         properties['tag'] = lines[0];
@@ -15,20 +15,27 @@ function parseTag(content:string) {
         }
     } else {
         let inlineMatch = content.matchAll(inlineTag);
-        let inlineMatchArr = Array.from(inlineMatch)[0]
-        if (!inlineMatchArr)
-            console.log(content)
-        let tagName = inlineMatchArr[1].toLowerCase();
-        let value = inlineMatchArr[2];
-        properties.tag = tagName 
-        properties.inline = true
-        properties.value= value ;
+        // let inlineMatchArr = Array.from(inlineMatch)[0]
+        // if (!inlineMatchArr)
+        //     console.log(content)
+        // console.log(inlineMatchArr)
+        // let tagName = inlineMatchArr[1].toLowerCase();
+        // let value = inlineMatchArr[2];
+        // properties.tag = tagName 
+        // properties.inline = true
+        // properties.value= value ;
+        let parts = content.split(':').map(d => d.trim());
+        properties.name = parts.shift().toLowerCase();
+        properties.value = parts
+        properties.inline = true;
     }
     return properties;
 }
 
-function parseScene(scenePath:string): SceneTree {
-    let content = readFileSync(scenePath, "utf-8");
+async function parseScene(scenePath:string): Promise<SceneTree> {
+    let content = await readTextFile(scenePath, {
+        dir:Dir.Document
+    });
     let tagContent = content.matchAll(tag);
     const tags = [];
     Array.from(tagContent).forEach(match => {

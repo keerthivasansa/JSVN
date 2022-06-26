@@ -1,0 +1,1 @@
+<div style="width: 100vw; height: 100vh;" class="flex text-center items-center justify-center text-4xl font-serif">The End</div>

@@ -6,7 +6,8 @@ interface Tag<Name extends TagName> {
     type: "tag",
     name: Name, 
     inline ?: boolean
-    properties: TagTypes[Name]
+    properties: TagTypes[Name], 
+    value: string[]
 }
 
 interface CharacterSpeech {
@@ -19,4 +20,4 @@ interface CharacterSpeech {
 type SceneProp = Tag<"goto"> | Tag<"scene"> | Tag<"play"> | Tag<"play"> | CharacterSpeech;
 type SceneTree = SceneProp[];
 
-export type { SceneProp, SceneTree, TagName }
+export type { SceneProp, SceneTree, TagName, CharacterSpeech, Tag }

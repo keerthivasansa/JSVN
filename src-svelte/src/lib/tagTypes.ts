@@ -1,31 +1,27 @@
 enum FocusMode { MULTIPLE, SINGLE }
 
 interface Tag {
-    inlineValue ?: string
-    [property:string]: string | number | boolean
-}
-
-const inlineValues = {
-    goto: "scene"
+    inlineValue?: string
+    [property: string]: string | number | boolean
 }
 
 interface TagTypes extends Record<string, Tag> {
     scene: {
-        background:string, 
-        bgmusic:string,
-        name:string, 
-        focusMode: FocusMode, 
-    }, 
+        background: string,
+        bgmusic: string,
+        name: string
+    },
     play: {
-        fadeIn: boolean, 
-        fadeOut: boolean, 
+        name: string,
+        fadeIn: boolean,
+        fadeOut: boolean,
         volume: number,
-    }, 
+    },
     if: {
-        condition:string, 
-    }, 
+        condition: string,
+    },
     goto: {
-        scene: string, 
+        scene: string,
         label: string
     }
 }

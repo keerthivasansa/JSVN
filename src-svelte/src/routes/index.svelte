@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { documentDir, join } from '@tauri-apps/api/path';
-	import { createDir, Dir, writeFile, readDir } from '@tauri-apps/api/fs';
+	import { createDir, Dir, writeFile, readDir, readTextFile } from '@tauri-apps/api/fs';
 	import { appWindow } from '@tauri-apps/api/window';
 	import { onMount } from 'svelte';
 	import { DEFAULT_SCENE } from '$lib/default';
 	import Modal from '$src/components/Modal.svelte';
+	import { parseScene } from '$lib/utils';
+import { goto } from '$app/navigation';
 
 	let PROJECT_DIR: string;
 	let projects: string[] = [];
@@ -69,6 +71,12 @@
 		showNewProject = false;
 	}
 
+	async function processProject(name: string) {
+		let path = await join('JSVN', name, 'start.jsv');
+		console.log(path);
+		goto("/scene?scene=" + path);
+	}
+
 	async function load() {
 		let docDir = await documentDir();
 		PROJECT_DIR = await join(docDir, 'JSVN');
@@ -119,8 +127,10 @@
 		<h1 style="margin-bottom: 1.5rem;" class="text-center">Projects</h1>
 		<div class="flex flex-row row-wrap gap-4">
 			{#each projects as project}
-				<span style="min-width: 3rem;" class="px-2 py-4 border-2 border-black rounded-lg"
-					>{project}</span
+				<button
+					on:click={(_) => processProject(project)}
+					style="min-width: 3rem;"
+					class="px-2 py-4 border-2 border-black rounded-lg">{project}</button
 				>
 			{/each}
 		</div>

@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "cd src-svelte && npm run build",
-    "dev": "cd src-svelte && npm run dev",
+    "svelte:install": "cd src-svelte && yarn",
+    "build": "cd src-svelte && yarn build",
+    "dev": "cd src-svelte && yarn dev",
     "start": "sirv public --no-clear",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "tauri": "tauri"

@@ -33,7 +33,6 @@ jobs:
         version: 6.0.2
     - name: install app dependencies and build it
       run: pnpm i && pnpm build
-
     - uses: tauri-apps/tauri-action@v0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

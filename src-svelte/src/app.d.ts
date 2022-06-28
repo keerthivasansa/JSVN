@@ -13,5 +13,6 @@ declare namespace App {
 }
 
 declare interface Window {
-	var: (name:string) => string
+	var: (name:string) => string, 
+	json: (name:string) => Object
 }

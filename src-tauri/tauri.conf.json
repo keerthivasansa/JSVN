@@ -77,6 +77,15 @@
         "readFile": true,
         "readDir": true
       }, 
+      "protocol": {
+        "asset": true,
+        "assetScope": [
+          "$DOCUMENT\\*",
+          "$DOCUMENT\\JSVN\\",
+          "$DOCUMENT\\JSVN\\**",
+          "$DOCUMENT\\JSVN\\**\\*"
+        ]
+      },
       "window": {
         "setTitle": true, 
         "close": true

@@ -1,5 +1,8 @@
 import { goto } from "$app/navigation";
 import { window } from "@tauri-apps/api";
+import { join } from "@tauri-apps/api/path";
+import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { projectPath } from "./stores";
 import type { TagTypes } from "./tagTypes";
 import type { Tag } from "./types";
 
@@ -29,8 +32,15 @@ const tags: TagExecMap = {
                 console.error(er);
             }
         }
-        if (props.background)
-            document.body.style.backgroundImage = `url('${props.background}')`
+        if (props.background) {
+            projectPath.subscribe(async path => {
+                console.log(path);
+                let fullPath = await join(path, "assets", "images", props.background)
+                let bgUrl = convertFileSrc(fullPath)
+                console.log(bgUrl)
+                document.body.style.backgroundImage = `url('${bgUrl}')`
+            })
+        }
     },
     'goto': (props: TagTypes['goto']) => {
         const params = new URLSearchParams({

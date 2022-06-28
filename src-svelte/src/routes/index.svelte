@@ -7,6 +7,7 @@
 	import Modal from '$src/components/Modal.svelte';
 	import { parseScene } from '$lib/utils';
 import { goto } from '$app/navigation';
+import { projectPath } from '$lib/stores';
 
 	let PROJECT_DIR: string;
 	let projects: string[] = [];
@@ -73,6 +74,7 @@ import { goto } from '$app/navigation';
 
 	async function processProject(name: string) {
 		let path = await join('JSVN', name, 'start.jsv');
+		projectPath.set(await join(await documentDir(), 'JSVN', name))
 		console.log(path);
 		goto("/scene?scene=" + path);
 	}
@@ -167,7 +169,7 @@ import { goto } from '$app/navigation';
 	</main>
 </div>
 
-<style type="text/postcss">
+<style lang="postcss">
 	.nav-span {
 		@apply cursor-pointer px-8 py-4 text-black font-semibold bg-white flex flex-col items-center rounded-md;
 	}

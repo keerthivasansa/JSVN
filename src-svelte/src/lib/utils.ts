@@ -5,13 +5,14 @@ const tag = /---?([\w\W]*?)---?/g
 const inlineTag = /(\w+):([\w\W]+):?([\w\W]+)?/g
 
 function parseTag(content:string) {
-    let properties: Record<string, string | boolean | string[]> = { type: "tag" };
+    let tag: Record<string, any> = { type: "tag" };
     if (content.includes('\n')) {
         let lines = content.split('\n').map(line => line.trim()).filter(line => line != '');
-        properties['tag'] = lines[0];
+        tag['name'] = lines[0].toLowerCase();
+        tag.properties = {};
         for (let i = 1; i < lines.length; i++) {
-            const parts = lines[i].split(":");
-            properties[parts[0].toLowerCase()] = parts[1];
+            const parts = lines[i].split(":").map(p => p.trim());
+            tag.properties[parts[0].toLowerCase()] = parts[1];
         }
     } else {
         let inlineMatch = content.matchAll(inlineTag);
@@ -25,11 +26,11 @@ function parseTag(content:string) {
         // properties.inline = true
         // properties.value= value ;
         let parts = content.split(':').map(d => d.trim());
-        properties.name = parts.shift().toLowerCase();
-        properties.value = parts
-        properties.inline = true;
+        tag.name = parts.shift().toLowerCase();
+        tag.value = parts
+        tag.inline = true;
     }
-    return properties;
+    return tag;
 }
 
 async function parseScene(scenePath:string): Promise<SceneTree> {
@@ -57,11 +58,11 @@ async function parseScene(scenePath:string): Promise<SceneTree> {
         if (parts.length < 2) // If it's not a new character, add it to the lines of the previous speaker
             return sceneTree[sceneTree.length - 1].lines.push(parts[0]) 
         
-        let character = parts[0];
+        let name = parts[0];
         let speechText = parts[1];
 
-        let characterParts = character.split('/');
-        character = characterParts[0]; // Either way, assign the first part as character name
+        let characterParts = name.split('/');
+        name = characterParts[0]; // Either way, assign the first part as character name
 
         let emotion:string;
         if (characterParts.length > 1) // Emotion is given
@@ -69,7 +70,7 @@ async function parseScene(scenePath:string): Promise<SceneTree> {
         else
             emotion = ''
         
-        sceneTree.push({ type: "character", emotion, character,  lines:[speechText] })
+        sceneTree.push({ type: "character", emotion, name,  lines:[speechText] })
     })
     return sceneTree;
 }

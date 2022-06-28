@@ -15,7 +15,8 @@ interface TagExecMap {
 const inlineMap = {
     'scene': ['name', 'background'],
     'goto': ['scene', 'label'],
-    'play': ['media', 'volume']
+    'play': ['media', 'volume'], 
+    'set': ['name', 'value']
 }
 
 const tags: TagExecMap = {
@@ -50,6 +51,9 @@ const tags: TagExecMap = {
         let url = "/scene?" + params.toString();
         console.log("Moving to scene: " + url);
         goto(url);
+    }, 
+    'set': (props:TagTypes['set']) => {
+        localStorage.setItem(props.name, props.value)
     }
 }
 

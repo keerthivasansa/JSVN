@@ -3,6 +3,7 @@ import type { SceneTree } from "./types";
 
 const tag = /---?([\w\W]*?)---?/g
 const inlineTag = /(\w+):([\w\W]+):?([\w\W]+)?/g
+const varReg = /{{([\w\W]+?)}}/ig
 
 function parseTag(content:string) {
     let tag: Record<string, any> = { type: "tag" };
@@ -48,7 +49,7 @@ async function parseScene(scenePath:string): Promise<SceneTree> {
         tags.push(tag)
     })
     // Now that all tags are extracted, create dialog sequence
-    let lines = content.split('\n').map(line => line.trim()).filter(line => line != '');
+    let lines = content.split('\n').map(line => line.trim()).filter(line => line != '' && !line.startsWith('#'));
     let sceneTree = [];
     lines.forEach((line, _) => {
         let tagMatch = Array.from(line.matchAll(/__tag(\d)__/g))
@@ -75,4 +76,22 @@ async function parseScene(scenePath:string): Promise<SceneTree> {
     return sceneTree;
 }
 
-export { parseScene }
+function insertVariables(line:string) {
+    let result = [...line.matchAll(varReg)]
+    let vals = []
+    if (result.length < 1)
+        return line;
+        
+    result.forEach((match, index) => {
+        line = line.replace(match[0], `__var${index}__`)
+        const val = localStorage.getItem(match[1].trim());
+        vals.push(val)
+    })
+
+    vals.forEach((val, index) => {
+        line = line.replace(`__var${index}__`, val)
+    })
+    return line;
+}
+
+export { parseScene, insertVariables }

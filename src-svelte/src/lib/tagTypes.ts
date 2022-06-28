@@ -23,6 +23,10 @@ interface TagTypes extends Record<string, Tag> {
     goto: {
         scene: string,
         label: string
+    },
+    set: {
+        name: string,
+        value: string
     }
 }
 

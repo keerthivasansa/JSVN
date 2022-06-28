@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { execTag } from '$lib/tags';
 	import type { CharacterSpeech, SceneTree } from '$lib/types';
-	import { parseScene } from '$lib/utils';
+	import { insertVariables, parseScene } from '$lib/utils';
 	import { onMount } from 'svelte';
 
 	let sceneTree: SceneTree;
@@ -16,10 +15,13 @@
 		console.log('Scene size: ', sceneTree.length);
 		console.log(sceneTree);
 		try {
-			nextEvent();
-			nextEvent();
+			if (sceneTree[0].type == 'tag' && sceneTree[0].name == 'scene') 
+				nextEvent(); // reading the scene tag if any
 			document.addEventListener('keyup', (e) => {
-				if (e.key === 'Enter') nextEvent();
+				if (e.key === 'Enter') {
+					console.log('Enter pressed');
+					nextEvent();
+				}
 			});
 		} catch (e) {
 			console.error(e);
@@ -37,11 +39,16 @@
 
 	function nextEvent() {
 		const tag = sceneTree.shift();
-		if (!tag && currentCharacter.lines.length < 1) return goto('/');
+		console.log('tag:');
 		console.log(tag);
-		if (tag.type == 'tag') return execTag(tag);
-		else currentCharacter = tag;
-		currentLine = currentCharacter.lines.shift();
+		if (!tag && currentCharacter.lines.length < 1) return (location.href = '/');
+		if (tag.type == 'tag') {
+			execTag(tag);
+			nextEvent();
+			return;
+		} else currentCharacter = tag;
+		let line = currentCharacter.lines.shift();
+		currentLine = insertVariables(line);
 	}
 
 	onMount(load);

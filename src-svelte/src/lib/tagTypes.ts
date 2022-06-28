@@ -27,6 +27,11 @@ interface TagTypes extends Record<string, Tag> {
     set: {
         name: string,
         value: string
+    },
+    input: {
+        name: string,
+        prompt: string, 
+        type: string
     }
 }
 

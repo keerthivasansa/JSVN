@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { input } from '$lib/stores';
 	import { execTag } from '$lib/tags';
 	import type { CharacterSpeech, SceneTree } from '$lib/types';
 	import { insertVariables, parseScene } from '$lib/utils';
+	import Modal from '$src/components/Modal.svelte';
 	import { onMount } from 'svelte';
 
 	let sceneTree: SceneTree;
@@ -15,10 +17,10 @@
 		console.log('Scene size: ', sceneTree.length);
 		console.log(sceneTree);
 		try {
-			if (sceneTree[0].type == 'tag' && sceneTree[0].name == 'scene') 
-				nextEvent(); // reading the scene tag if any
+			if (sceneTree[0].type == 'tag' && sceneTree[0].name == 'scene') nextEvent(); // reading the scene tag if any
 			document.addEventListener('keyup', (e) => {
 				if (e.key === 'Enter') {
+					console.log(e)
 					console.log('Enter pressed');
 					nextEvent();
 				}
@@ -38,6 +40,7 @@
 	let currentLine: string;
 
 	function nextEvent() {
+		if ($input.show) return;
 		const tag = sceneTree.shift();
 		console.log('tag:');
 		console.log(tag);
@@ -51,8 +54,32 @@
 		currentLine = insertVariables(line);
 	}
 
+	function submitInput(next:boolean = false) {
+		console.log("submitting input")
+		localStorage.setItem($input.name, $input.value);
+		input.set({ show: false, name: '', value: '', prompt: '' });
+		if (next)
+			nextEvent();
+	}
+
+	input.subscribe((state) => console.log(state));
+
 	onMount(load);
 </script>
+
+<Modal bind:show={$input.show} closable={false}>
+	<div slot="modal-inner" class="py-2">
+		<form action="" on:submit|preventDefault|stopPropagation={_ => submitInput(false)}>
+			<h3 class="text-xl mx-3 text-left">{$input.prompt}:</h3>
+			<input
+				type="text"
+				class="border-2 border-gray-500"
+				bind:value={$input.value}
+			/>
+			<button type="submit" on:click|stopPropagation={_ => submitInput(true)}>Submit</button>
+		</form>
+	</div>
+</Modal>
 
 <div class="frame" />
 

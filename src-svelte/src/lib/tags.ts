@@ -2,7 +2,7 @@ import { goto } from "$app/navigation";
 import { window } from "@tauri-apps/api";
 import { join } from "@tauri-apps/api/path";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
-import { projectPath } from "./stores";
+import { input, projectPath } from "./stores";
 import type { TagTypes } from "./tagTypes";
 import type { Tag } from "./types";
 
@@ -15,8 +15,9 @@ interface TagExecMap {
 const inlineMap = {
     'scene': ['name', 'background'],
     'goto': ['scene', 'label'],
-    'play': ['media', 'volume'], 
-    'set': ['name', 'value']
+    'play': ['media', 'volume'],
+    'set': ['name', 'value'], 
+    'input': ['name', 'prompt', 'type'],
 }
 
 const tags: TagExecMap = {
@@ -51,9 +52,19 @@ const tags: TagExecMap = {
         let url = "/scene?" + params.toString();
         console.log("Moving to scene: " + url);
         goto(url);
-    }, 
-    'set': (props:TagTypes['set']) => {
+    },
+    'set': (props: TagTypes['set']) => {
         localStorage.setItem(props.name, props.value)
+    },
+    'input': (props: TagTypes['input']) => {
+        input.set({
+            show: true,
+            value: '',
+            name: props.name,
+            prompt: props.prompt,
+        })
+        console.log(props)
+
     }
 }
 

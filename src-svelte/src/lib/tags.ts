@@ -64,7 +64,6 @@ const tags: TagExecMap = {
             prompt: props.prompt,
         })
         console.log(props)
-
     }
 }
 

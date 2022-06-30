@@ -5,9 +5,8 @@
 	import { onMount } from 'svelte';
 	import { DEFAULT_SCENE } from '$lib/default';
 	import Modal from '$src/components/Modal.svelte';
-	import { parseScene } from '$lib/utils';
-import { goto } from '$app/navigation';
-import { projectPath } from '$lib/stores';
+	import { goto } from '$app/navigation';
+	import { projectPath } from '$lib/stores';
 
 	let PROJECT_DIR: string;
 	let projects: string[] = [];
@@ -73,10 +72,11 @@ import { projectPath } from '$lib/stores';
 	}
 
 	async function processProject(name: string) {
-		let path = await join('JSVN', name, 'start.jsv');
-		projectPath.set(await join(await documentDir(), 'JSVN', name))
-		console.log(path);
-		goto("/scene?scene=" + path);
+		let docDir = await documentDir();
+		let folderPath = await join(docDir, 'JSVN', name);
+		projectPath.set(folderPath);
+		let startScenePath = await join(folderPath, 'start.jsv');
+		goto('/scene?scene=' + startScenePath);
 	}
 
 	async function load() {

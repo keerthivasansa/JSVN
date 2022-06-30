@@ -55,7 +55,7 @@
 	}
 
 	function submitInput(next:boolean = false) {
-		console.log("submitting input")
+		console.log("submitting input", next);
 		localStorage.setItem($input.name, $input.value);
 		input.set({ show: false, name: '', value: '', prompt: '' });
 		if (next)
@@ -76,7 +76,7 @@
 				class="border-2 border-gray-500"
 				bind:value={$input.value}
 			/>
-			<button type="submit" on:click|stopPropagation={_ => submitInput(true)}>Submit</button>
+			<button type="submit" on:submit={_ => submitInput(true)}>Submit</button>
 		</form>
 	</div>
 </Modal>

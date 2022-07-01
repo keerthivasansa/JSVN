@@ -4,7 +4,9 @@ import { join } from "@tauri-apps/api/path";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { input, projectPath } from "./stores";
 import type { TagTypes } from "./tagTypes";
-import type { Tag } from "./types";
+import type { SceneTree, Tag } from "./types";
+import safeEval from "safe-evaluate-expression"
+import { sceneTree } from "./stores"
 
 type f<k extends string> = (props: TagTypes[k]) => void
 
@@ -16,8 +18,9 @@ const inlineMap = {
     'scene': ['name', 'background'],
     'goto': ['scene', 'label'],
     'play': ['media', 'volume'],
-    'set': ['name', 'value'], 
+    'set': ['name', 'value'],
     'input': ['name', 'prompt', 'type'],
+    'if': ['condition']
 }
 
 const tags: TagExecMap = {
@@ -64,6 +67,22 @@ const tags: TagExecMap = {
             prompt: props.prompt,
         })
         console.log(props)
+    },
+    'if': (props: TagTypes['if']) => { // TODO Handle nested if, else if and other cases
+        let changeTree = (tree: SceneTree) => {
+            tree.forEach((prop, index) => {
+                if (prop.name == 'endif') {
+                    if (safeEval(props.condition, localStorage)) {
+                        console.log("Condition met, removing endif")
+                        tree.splice(index, 1);
+                        sceneTree.set(tree)
+                    } else sceneTree.set(tree.slice(index + 1))
+                    changeTree = () => null;
+                }
+            })
+        }
+        const unsub = sceneTree.subscribe(changeTree);
+        unsub();
     }
 }
 

@@ -2,7 +2,7 @@
 	import { fade } from 'svelte/transition';
 
 	export let show = false;
-	export const closable: boolean = true;
+	export let closable: boolean = true;
 
 	function handleMouseClick(e: MouseEvent) {
 		if (!closable) return;

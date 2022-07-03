@@ -1,7 +1,7 @@
 import { goto } from "$app/navigation";
 import { window } from "@tauri-apps/api";
 import { join } from "@tauri-apps/api/path";
-import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { convertFileSrc, transformCallback } from "@tauri-apps/api/tauri";
 import { input, projectPath } from "./stores";
 import type { TagTypes } from "./tagTypes";
 import type { SceneTree, Tag } from "./types";
@@ -69,15 +69,23 @@ const tags: TagExecMap = {
         console.log(props)
     },
     'if': (props: TagTypes['if']) => { // TODO Handle nested if, else if and other cases
+        let ifBlock = []
         let changeTree = (tree: SceneTree) => {
+            let elseIndex = -1;
             tree.forEach((prop, index) => {
-                if (prop.name == 'endif') {
-                    if (safeEval(props.condition, localStorage)) {
-                        console.log("Condition met, removing endif")
-                        tree.splice(index, 1);
-                        sceneTree.set(tree)
-                    } else sceneTree.set(tree.slice(index + 1))
-                    changeTree = () => null;
+                if (prop.name == 'else')
+                    elseIndex = index;
+                else if (prop.name == 'endif') {
+                    if (safeEval(props.condition, localStorage))
+                        if (elseIndex != -1)
+                            ifBlock = tree.slice(0, elseIndex);
+                        else
+                            ifBlock = tree.slice(0, index)
+                    else if (elseIndex != -1)
+                            ifBlock = tree.slice(elseIndex + 1, index);
+                    tree = ifBlock.concat(tree.slice(index + 1))
+                    changeTree = () => null
+                    sceneTree.set(tree);
                 }
             })
         }

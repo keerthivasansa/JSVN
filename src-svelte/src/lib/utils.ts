@@ -2,10 +2,9 @@ import { Dir, readTextFile } from "@tauri-apps/api/fs";
 import type { SceneTree } from "./types";
 
 const tag = /---?([\w\W]*?)---?/g
-const inlineTag = /(\w+):([\w\W]+):?([\w\W]+)?/g
 const varReg = /{{([\w\W]+?)}}/ig
 
-function parseTag(content:string) {
+function parseTag(content: string) {
     let tag: Record<string, any> = { type: "tag" };
     if (content.includes('\n')) {
         let lines = content.split('\n').map(line => line.trim()).filter(line => line != '');
@@ -16,16 +15,6 @@ function parseTag(content:string) {
             tag.properties[parts[0].toLowerCase()] = parts[1];
         }
     } else {
-        let inlineMatch = content.matchAll(inlineTag);
-        // let inlineMatchArr = Array.from(inlineMatch)[0]
-        // if (!inlineMatchArr)
-        //     console.log(content)
-        // console.log(inlineMatchArr)
-        // let tagName = inlineMatchArr[1].toLowerCase();
-        // let value = inlineMatchArr[2];
-        // properties.tag = tagName 
-        // properties.inline = true
-        // properties.value= value ;
         let parts = content.split(':').map(d => d.trim());
         tag.name = parts.shift().toLowerCase();
         tag.value = parts
@@ -34,9 +23,9 @@ function parseTag(content:string) {
     return tag;
 }
 
-async function parseScene(scenePath:string): Promise<SceneTree> {
+async function parseScene(scenePath: string): Promise<SceneTree> {
     let content = await readTextFile(scenePath, {
-        dir:Dir.Document
+        dir: Dir.Document
     });
     let tagContent = content.matchAll(tag);
     const tags = [];
@@ -57,40 +46,37 @@ async function parseScene(scenePath:string): Promise<SceneTree> {
             return sceneTree.push(tags[tagMatch[0][1]]);
         let parts = line.split(":").map(part => part.trim());
         if (parts.length < 2) // If it's not a new character, add it to the lines of the previous speaker
-            return sceneTree[sceneTree.length - 1].lines.push(parts[0]) 
-        
+            return sceneTree[sceneTree.length - 1].lines.push(parts[0])
+
         let name = parts[0];
         let speechText = parts[1];
 
         let characterParts = name.split('/');
         name = characterParts[0]; // Either way, assign the first part as character name
 
-        let emotion:string;
+        let emotion: string;
         if (characterParts.length > 1) // Emotion is given
             emotion = characterParts[1]
         else
             emotion = ''
-        
-        sceneTree.push({ type: "character", emotion, name,  lines:[speechText] })
+
+        sceneTree.push({ type: "character", emotion, name, lines: [speechText] })
     })
     return sceneTree;
 }
 
-function insertVariables(line:string) {
+function insertVariables(line: string) {
     let result = [...line.matchAll(varReg)]
-    let vals = []
+
     if (result.length < 1)
         return line;
-        
-    result.forEach((match, index) => {
-        line = line.replace(match[0], `__var${index}__`)
+
+    result.forEach((match) => {
         const val = localStorage.getItem(match[1].trim());
-        vals.push(val)
+        line = line.replaceAll(match[0], val)
     })
 
-    vals.forEach((val, index) => {
-        line = line.replace(`__var${index}__`, val)
-    })
+    console.log(line);
     return line;
 }
 

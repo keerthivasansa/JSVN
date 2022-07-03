@@ -14,7 +14,7 @@
 		console.log('Loading scene at: ' + path);
 
 		sceneTree.subscribe((changedTree) => {
-			console.log("tree changed:")
+			console.log('tree changed:');
 			console.log(tree);
 			tree = changedTree;
 		}); // Auomatically go to next event when the tree changes
@@ -30,12 +30,7 @@
 		nextEvent();
 	}
 
-	let currentCharacter: CharacterSpeech = {
-		lines: [],
-		name: '',
-		emotion: '',
-		type: 'character'
-	};
+	let currentCharacter: CharacterSpeech;
 	let currentLine: string;
 
 	function nextEvent() {
@@ -45,7 +40,7 @@
 		console.log(tag);
 		if (!tag && currentCharacter.lines.length < 1) return (location.href = '/');
 		if (tag.type == 'tag') {
-			console.log(tag.name)
+			console.log(tag.name);
 			execTag(tag);
 			nextEvent();
 			return;
@@ -58,10 +53,8 @@
 		console.log('submitting input', next);
 		localStorage.setItem($input.name, $input.value);
 		input.set({ show: false, name: '', value: '', prompt: '' });
-		if (next) nextEvent();
+		nextEvent();
 	}
-
-	input.subscribe((state) => console.log(state));
 
 	onMount(load);
 </script>

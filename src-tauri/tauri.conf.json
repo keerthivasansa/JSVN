@@ -1,12 +1,12 @@
 {
   "package": {
-    "productName": "svelte-tauri-demo",
+    "productName": "jsvn",
     "version": "0.1.0"
   },
   "build": {
     "distDir": "../public",
     "devPath": "http://localhost:3000",
-    "beforeDevCommand": "yarn dev"
+    "beforeDevCommand": "pnpm dev"
   },
   "tauri": {
     "bundle": {
@@ -22,10 +22,10 @@
       ],
       "resources": [],
       "externalBin": [],
-      "copyright": "",
+      "copyright": "Copyright Keerthi Vasan 2022",
       "category": "DeveloperTool",
-      "shortDescription": "",
-      "longDescription": "",
+      "shortDescription": "JSVN is an engine to create visual novel games with ease.",
+      "longDescription": "JSVN is an engine written in Javascript to create visual novel games with ease.",
       "deb": {
         "depends": []
       },
